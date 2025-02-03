@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JokeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JokeSevice</a> &gt; <a href="index.source.html" class="el_package">com.swapnilpaliwal.controller</a> &gt; <span class="el_source">JokeController.java</span></div><h1>JokeController.java</h1><pre class="source lang-java linenums">package com.swapnilpaliwal.controller;
+
+import com.swapnilpaliwal.model.ApiResponse;
+import com.swapnilpaliwal.model.Joke;
+import com.swapnilpaliwal.model.RequestModel;
+import com.swapnilpaliwal.model.Status;
+import com.swapnilpaliwal.repository.RepositoryBase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.function.BiPredicate;
+
+@RestController
+@RequestMapping(&quot;/v1/jokeController&quot;)
+<span class="fc" id="L21">public class JokeController {</span>
+
+<span class="fc" id="L23">    private final BiPredicate&lt;Integer, Integer&gt; shouldCallLocal =</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">            (firstNumber, secondNumber) -&gt; firstNumber &gt; secondNumber;</span>
+
+    // Injected through the yaml file
+    @Value(&quot;${chucknorris.random-joke-url}&quot;)
+    private String apiUrl;
+
+    @Autowired
+    RepositoryBase&lt;Joke&gt; repositoryBase;
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @Autowired
+    Random random;
+
+
+    /**
+     * A test endpoint to get a joke
+     *
+     * &lt;p&gt;This is a test endpoint made to query the API and see
+     * if the model and everything is working as expected&lt;/p&gt;
+     *
+     * @return APiResponse&lt;? super Joke&gt; that includes a joke object
+     */
+    @GetMapping(&quot;/testJoke&quot;)
+    public ApiResponse&lt;? super Joke&gt; testJoke() {
+<span class="fc" id="L50">        final Joke joke = defaultJoke();</span>
+<span class="fc" id="L51">        joke.setLocal(true);</span>
+<span class="fc" id="L52">        final ApiResponse&lt;? super Joke&gt; apiResponse = new ApiResponse&lt;&gt;(joke, &quot;&quot;, Status.STORED);</span>
+<span class="fc" id="L53">        configureObject(joke.isLocal(), apiResponse);</span>
+<span class="fc" id="L54">        return apiResponse;</span>
+    };
+
+
+    /**
+     * An endpoint that returns a joke from storage or API call
+     *
+     * &lt;p&gt;This API either makes an external API call or
+     * Retrieves information from the storage.&lt;/p&gt;
+     *
+     * @return ApiResponse&lt;? super Joke&gt; that includes a Joke obect
+     */
+    @GetMapping
+    public ApiResponse&lt;? super Joke&gt; getJoke() {
+<span class="fc" id="L68">        final int storageSize = repositoryBase.storageSize();</span>
+
+        Joke joke;
+        Status status;
+<span class="fc" id="L72">        if(!shouldCallLocal.test(random.nextInt(1000),</span>
+<span class="pc bpc" id="L73" title="1 of 4 branches missed.">                random.nextInt(1000)) || storageSize &lt; 5) {</span>
+<span class="fc" id="L74">            joke = restTemplate.getForObject(apiUrl, Joke.class);</span>
+<span class="fc" id="L75">            joke.setLocal(false);</span>
+<span class="fc" id="L76">            joke.setJokeId(storageSize);</span>
+<span class="fc" id="L77">            status = Status.RETRIEVED_ONLINE;</span>
+<span class="fc" id="L78">            repositoryBase.addJoke(joke);</span>
+<span class="fc" id="L79">        } else {</span>
+            // Get the joke from the storage
+<span class="fc" id="L81">            joke = repositoryBase.getJoke();</span>
+<span class="fc" id="L82">            status = Status.STORED;</span>
+        }
+<span class="fc" id="L84">        final ApiResponse&lt;? super Joke&gt; apiResponse = new ApiResponse&lt;&gt;(joke, &quot;&quot;, status);</span>
+<span class="fc" id="L85">        configureObject(joke.isLocal(), apiResponse);</span>
+<span class="fc" id="L86">        return apiResponse;</span>
+    };
+
+
+    /**
+     * Returns multiple jokes from the beginning
+     *
+     * &lt;p&gt;Can be used to get all jokes if count is higher than storage&lt;/p&gt;
+     *
+     * @param requestModel that holds the request count for number of first X jokes to hold
+     * @return List&lt;? extends Joke&gt; that holds all the jokes
+     */
+    @GetMapping(&quot;/multiple-early-jokes&quot;)
+    public ApiResponse&lt;? super Joke&gt; firstXJokes(@RequestBody RequestModel requestModel) {
+<span class="nc" id="L100">        final int jokeAmount = requestModel.getCount();</span>
+<span class="nc" id="L101">        final List&lt;? extends Joke&gt; jokes = repositoryBase.getSomeJoke(jokeAmount);</span>
+
+<span class="nc" id="L103">        final List&lt;? extends Joke&gt; finalJokes =</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                (jokes == null)</span>
+<span class="nc" id="L105">                        ? Collections.singletonList(defaultJoke())</span>
+<span class="nc" id="L106">                        : jokes;</span>
+
+        // Create one ApiResponse object
+<span class="nc" id="L109">        final ApiResponse&lt;? super Joke&gt; apiResponse = new ApiResponse&lt;&gt;(finalJokes, &quot;&quot;, Status.STORED);</span>
+<span class="nc" id="L110">        configureObject(true, apiResponse);</span>
+
+<span class="nc" id="L112">        return apiResponse;</span>
+    };
+
+
+    /**
+     * Adding a custom joke to the API
+     *
+     * &lt;p&gt;If you want to add the recent joke this is the
+     * API that makes that happen&lt;/p&gt;
+     *
+     * @param joke that takes this model in
+     */
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void postJoke(@RequestBody final Joke joke) {
+        // Add a joke to the repository
+<span class="fc" id="L128">        final int id = repositoryBase.storageSize();</span>
+<span class="fc" id="L129">        joke.setLocal(false);</span>
+<span class="fc" id="L130">        joke.setJokeId(id);</span>
+        // Status of the API call
+<span class="fc" id="L132">        Status status = Status.RETRIEVED_ONLINE;</span>
+<span class="fc" id="L133">        repositoryBase.addJoke(joke);</span>
+<span class="fc" id="L134">    };</span>
+
+
+    // Configure the object for the is it local or retrieved online?
+    private void configureObject(boolean isLocal, ApiResponse&lt;? super Joke&gt; apiResponse) {
+
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        final Status jokeStatus = isLocal ? Status.STORED : Status.RETRIEVED_ONLINE;</span>
+<span class="fc" id="L141">        final String localString = &quot;This Joke is returned from the DB&quot;;</span>
+<span class="fc" id="L142">        final String apiString = &quot;This Joke is returned from the API&quot;;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        final String apiNote = isLocal ? localString : apiString;</span>
+
+        // Set the object
+<span class="fc" id="L146">        apiResponse.setStatus(jokeStatus);</span>
+<span class="fc" id="L147">        apiResponse.setNote(apiNote);</span>
+<span class="fc" id="L148">    };</span>
+
+
+    // Default Joke to show when there is nothing to show
+    private Joke defaultJoke() {
+<span class="fc" id="L153">        return new Joke(&quot;Jesus once walked on water;Chuck Norris once swam on land&quot;, apiUrl);</span>
+    };
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

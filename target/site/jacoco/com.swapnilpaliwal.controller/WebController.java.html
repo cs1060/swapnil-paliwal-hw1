@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JokeSevice</a> &gt; <a href="index.source.html" class="el_package">com.swapnilpaliwal.controller</a> &gt; <span class="el_source">WebController.java</span></div><h1>WebController.java</h1><pre class="source lang-java linenums">package com.swapnilpaliwal.controller;
+
+import com.swapnilpaliwal.model.Joke;
+import com.swapnilpaliwal.repository.JokeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+
+@Controller
+<span class="nc" id="L15">public class WebController {</span>
+    
+<span class="nc" id="L17">    private static final Logger logger = LoggerFactory.getLogger(WebController.class);</span>
+
+    @Autowired
+    private JokeRepository jokeRepository;
+    
+    @Autowired
+    private JokeController jokeController;
+
+    @Value(&quot;${server.port}&quot;)
+    private String serverPort;
+    
+    @Value(&quot;${app.base-url}&quot;)
+    private String baseUrl;
+
+    @GetMapping(&quot;/&quot;)
+    public String home(Model model) {
+<span class="nc" id="L33">        logger.info(&quot;Serving home page&quot;);</span>
+        // Get a random joke for display
+<span class="nc" id="L35">        Joke currentJoke = jokeRepository.getJoke();</span>
+<span class="nc" id="L36">        model.addAttribute(&quot;randomJoke&quot;, currentJoke);</span>
+<span class="nc" id="L37">        model.addAttribute(&quot;jokeCount&quot;, jokeRepository.storageSize());</span>
+<span class="nc" id="L38">        return &quot;index&quot;;</span>
+    }
+
+    @PostMapping(&quot;/jokes&quot;)
+    public String createJoke(@RequestParam(&quot;jokeText&quot;) String jokeText, Model model) {
+        // Validate joke text
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (!StringUtils.hasText(jokeText)) {</span>
+<span class="nc" id="L45">            logger.warn(&quot;Attempted to create empty joke&quot;);</span>
+<span class="nc" id="L46">            model.addAttribute(&quot;error&quot;, &quot;Joke cannot be empty&quot;);</span>
+<span class="nc" id="L47">            model.addAttribute(&quot;randomJoke&quot;, jokeRepository.getJoke());</span>
+<span class="nc" id="L48">            model.addAttribute(&quot;jokeCount&quot;, jokeRepository.storageSize());</span>
+<span class="nc" id="L49">            return &quot;index&quot;;</span>
+        }
+        
+<span class="nc" id="L52">        logger.info(&quot;Creating new joke: {}&quot;, jokeText);</span>
+        // Create joke with required fields
+<span class="nc" id="L54">        String jokeUrl = baseUrl + &quot;/jokes/&quot; + (jokeRepository.storageSize() + 1);</span>
+<span class="nc" id="L55">        Joke joke = new Joke(jokeText.trim(), jokeUrl);</span>
+<span class="nc" id="L56">        joke.setLocal(true);</span>
+<span class="nc" id="L57">        jokeRepository.addJoke(joke);</span>
+        
+        // Get the most recently added joke
+<span class="nc" id="L60">        model.addAttribute(&quot;randomJoke&quot;, jokeRepository.getRecentJoke());</span>
+<span class="nc" id="L61">        model.addAttribute(&quot;jokeCount&quot;, jokeRepository.storageSize());</span>
+<span class="nc" id="L62">        return &quot;index&quot;;</span>
+    }
+
+    @GetMapping(&quot;/jokes/random&quot;)
+    public String getRandomJoke(Model model) {
+<span class="nc" id="L67">        logger.info(&quot;Getting random joke&quot;);</span>
+        // Use JokeController to get a joke (it will fetch from API if needed)
+<span class="nc" id="L69">        Joke joke = (Joke) jokeController.getJoke().getJoke();</span>
+<span class="nc" id="L70">        model.addAttribute(&quot;randomJoke&quot;, joke);</span>
+<span class="nc" id="L71">        model.addAttribute(&quot;jokeCount&quot;, jokeRepository.storageSize());</span>
+<span class="nc" id="L72">        return &quot;index&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JokeRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JokeSevice</a> &gt; <a href="index.source.html" class="el_package">com.swapnilpaliwal.repository</a> &gt; <span class="el_source">JokeRepository.java</span></div><h1>JokeRepository.java</h1><pre class="source lang-java linenums">package com.swapnilpaliwal.repository;
+import com.swapnilpaliwal.model.Joke;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+/**
+ * Implementation of the RepositoryBase interface for managing Joke entities.
+ * &lt;p&gt;
+ * This repository maintains an in-memory list of jokes and provides
+ * methods for adding and retrieving jokes in various ways.
+ */
+@Repository
+<span class="nc" id="L17">public class JokeRepository implements RepositoryBase&lt;Joke&gt; {</span>
+
+    /** List to store all jokes in memory */
+<span class="nc" id="L20">    final List&lt;Joke&gt; jokeList = new ArrayList&lt;&gt;();</span>
+
+    /** Random number generator for selecting random jokes */
+    @Autowired
+    Random random;
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * Returns a random joke from the repository using the injected Random instance.
+     * Returns null if the repository is empty.
+     * &lt;/p&gt;
+     */
+    @Override
+    public Joke getJoke() {
+        // We cannot create a joke object
+<span class="nc bnc" id="L36" title="All 2 branches missed.">        if(jokeList.isEmpty()) {</span>
+<span class="nc" id="L37">            return null;</span>
+        }
+        //Get a random joke and send it back
+<span class="nc" id="L40">        final int index = random.nextInt(storageSize());</span>
+<span class="nc" id="L41">        return jokeList.get(index);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * Adds a new joke to the end of the internal list.&lt;/p&gt;
+     */
+    @Override
+    public void addJoke(Joke joke) {
+<span class="nc" id="L51">        jokeList.add(joke);</span>
+<span class="nc" id="L52">    }</span>
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * Returns the last joke added to the repository.
+     * Returns null if the repository is empty.&lt;/p&gt;
+     */
+    @Override
+    public Joke getRecentJoke() {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if(jokeList.isEmpty()) {</span>
+<span class="nc" id="L63">            return null;</span>
+        }
+<span class="nc" id="L65">        final int index = jokeList.size();</span>
+<span class="nc" id="L66">        return jokeList.get(index-1);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int storageSize() {
+<span class="nc" id="L74">        return jokeList.size();</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     * &lt;p&gt;
+     * Returns a sublist of jokes up to the requested count.
+     * If count exceeds available jokes, returns all available jokes.&lt;/p&gt;
+     */
+    @Override
+    public List&lt;? extends Joke&gt; getSomeJoke(final int count) {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if(storageSize() == 0) {</span>
+<span class="nc" id="L86">            return  null;</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        } else if(count &gt;= storageSize()-1 &amp;&amp; count &gt; 0) {</span>
+<span class="nc" id="L88">            return jokeList;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        } else if(count &gt; 0) {</span>
+<span class="nc" id="L90">            final int sizeRange = random.nextInt(storageSize());</span>
+<span class="nc" id="L91">            final List&lt;Joke&gt; jokes = jokeList.subList(0, sizeRange);</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            return !jokes.isEmpty() ? jokes : null;</span>
+        }
+<span class="nc" id="L94">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,7 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+JokeSevice,com.swapnilpaliwal.repository,JokeRepository,93,0,14,0,22,0,13,0,6,0
+JokeSevice,com.swapnilpaliwal.model,Status,0,24,0,0,0,3,0,1,0,1
+JokeSevice,com.swapnilpaliwal.Configuration,ApplicationConfiguration,11,0,0,0,3,0,3,0,3,0
+JokeSevice,com.swapnilpaliwal,Main,8,0,0,0,3,0,2,0,2,0
+JokeSevice,com.swapnilpaliwal.controller,WebController,125,0,2,0,26,0,6,0,5,0
+JokeSevice,com.swapnilpaliwal.controller,JokeController,29,147,3,9,9,36,3,11,1,7

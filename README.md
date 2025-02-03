@@ -78,6 +78,38 @@ This advanced use of generics provides:
    ```
    The application will start on port 8080 by default.
 
+## Running Tests
+
+### Unit Tests
+The application includes comprehensive unit tests for controllers and repositories. Key test cases include:
+
+1. **JokeController Tests**
+   - Testing API joke retrieval
+   - Testing local storage joke retrieval
+   - Testing joke addition
+   - Testing error handling
+
+To run the tests:
+
+```bash
+# Run all tests
+mvn test
+
+# Run specific test class
+mvn test -Dtest=JokeControllerTest
+
+# Run with coverage report
+mvn test jacoco:report
+```
+
+The test suite demonstrates:
+- Mocking of external dependencies
+- Error case handling
+- Boundary condition testing
+- Generic type handling
+
+Test coverage reports can be found in `target/site/jacoco/index.html` after running with coverage.
+
 ## API Endpoints
 
 ### 1. Get Random Joke
