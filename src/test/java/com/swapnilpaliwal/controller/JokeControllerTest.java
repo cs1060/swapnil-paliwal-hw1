@@ -33,6 +33,7 @@ class JokeControllerTest {
     @InjectMocks
     private JokeController jokeController;
 
+    // This is the default base url for api that we get chuck norris jokes from.
     private static final String TEST_API_URL = "https://api.chucknorris.io/jokes/random";
     private static final String TEST_JOKE_TEXT = "Test joke";
 

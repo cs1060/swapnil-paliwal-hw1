@@ -167,6 +167,45 @@ POST /api/joke
      }
      ```
 
+## Live Demo
+Access the live application at: [https://cs1060.github.io/swapnil-paliwal-hw1/](https://cs1060.github.io/swapnil-paliwal-hw1/)
+
+## Deployment
+
+### GitHub Pages Deployment
+The application is automatically deployed to GitHub Pages when changes are pushed to the main branch. The deployment process:
+
+1. Builds the Spring Boot application
+2. Copies web resources to the deployment directory
+3. Deploys to GitHub Pages branch (gh-pages)
+
+To deploy manually:
+1. Push your changes to the main branch:
+   ```bash
+   git add .
+   git commit -m "Your commit message"
+   git push origin main
+   ```
+2. The GitHub Action will automatically:
+   - Build the project
+   - Deploy to GitHub Pages
+   - Make the site available at https://cs1060.github.io/swapnil-paliwal-hw1/
+
+### Local Development
+For local development:
+```bash
+# Run the application locally
+mvn spring-boot:run
+
+# Build the project
+mvn clean package
+
+# Run tests
+mvn test
+```
+
+The application will be available at `http://localhost:8080`
+
 ## Architecture Highlights
 
 The application showcases several advanced software engineering practices:
