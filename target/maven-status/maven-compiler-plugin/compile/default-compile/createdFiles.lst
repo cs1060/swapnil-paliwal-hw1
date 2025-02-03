@@ -1,0 +1,10 @@
+com/swapnilpaliwal/model/ApiResponse.class
+com/swapnilpaliwal/controller/JokeController.class
+com/swapnilpaliwal/model/Joke.class
+com/swapnilpaliwal/repository/RepositoryBase.class
+com/swapnilpaliwal/controller/WebController.class
+com/swapnilpaliwal/Configuration/ApplicationConfiguration.class
+com/swapnilpaliwal/Main.class
+com/swapnilpaliwal/repository/JokeRepository.class
+com/swapnilpaliwal/model/RequestModel.class
+com/swapnilpaliwal/model/Status.class

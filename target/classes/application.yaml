@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: joke-service
+  profiles:
+    active: dev
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+
+# Common configurations shared across all profiles
+chucknorris:
+  random-joke-url: "https://api.chucknorris.io/jokes/random"

@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  # Development-specific configurations
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# Logging configuration for development
+logging:
+  level:
+    root: INFO
+    com.swapnilpaliwal: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Custom application properties for development
+app:
+  environment: development
+  cache:
+    enabled: false
+  security:
+    require-ssl: false
+  base-url: http://localhost:${server.port}

@@ -1,0 +1,10 @@
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/Configuration/ApplicationConfiguration.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/Main.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/controller/JokeController.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/controller/WebController.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/model/ApiResponse.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/model/Joke.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/model/RequestModel.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/model/Status.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/repository/JokeRepository.java
+/Users/swapnilpaliwal/Documents/Harvard/API/SoftwareEngineering/JokeSevice/src/main/java/com/swapnilpaliwal/repository/RepositoryBase.java

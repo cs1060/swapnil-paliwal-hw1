@@ -1,0 +1,32 @@
+server:
+  port: 80
+
+spring:
+  # Production-specific configurations
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+
+# Logging configuration for production
+logging:
+  level:
+    root: WARN
+    com.swapnilpaliwal: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: /var/log/joke-service/application.log
+    max-size: 10MB
+    max-history: 10
+
+# Custom application properties for production
+app:
+  environment: production
+  base-url: http://localhost:${server.port}
+  cache:
+    enabled: true
+  security:
+    require-ssl: true
